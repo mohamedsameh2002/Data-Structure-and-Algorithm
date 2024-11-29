@@ -1,50 +1,154 @@
-#Three in One:how you colud use a single python list to implement three stacks
-# for Stack 1 - [0],[1],[2]----->[0,n/3]
-# for Stack 2 - [3],[4],[6]----->[n/3,2n/3]
-# for Stack 3 - [7],[8],[9]----->[2n/3,n]
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+    def __str__(self):
+        return str(self.val)
+    def __repr__(self):
+        return self.__str__()
 
-class MultiStack:
-    def __init__(self,stack_size) -> None:
-        self.number_stacks=3
-        self.cust_list= [0] * (stack_size * self.number_stacks)
-        self.sizes = [0] * self.number_stacks
-        self.stack_size=stack_size
+#https://leetcode.com/problems/valid-parentheses/description
+class Solution:
+    def isValid(self, s):
+        values = {'(': ')', '[': ']', '{': '}'}
+        stack = []
+        for i in s:
+            if i in values:  
+                stack.append(i)
+            elif i in values.values():  
+                if not stack or values[stack.pop()] != i:
+                    return False
+        return len(stack) == 0
 
-    def is_full(self,stack_num):
-        return self.sizes[stack_num] == self.stack_size
-    
-    def is_empty(self,stack_num):
-        return self.sizes[stack_num] == 0
-    
-    def index_of_top(self,stack_num):
-        offset=stack_num * self.stack_size # 0 * 6 = 0,كدا احنا في اول ستاك عشان بدأنا نعد من صفر, دلوقت في الخطوه التانيه هنشوف  في كام عنصر في  اول ستاك
-        return offset + self.sizes[stack_num]-1# اربعه بعد عشره هتبقا اربعتاشر ناقص واحد بقت انكس تلاتاشر
-    
-    def push(self,stack_num,value):
-        if self.is_full(stack_num):
+
+# https://leetcode.com/problems/clear-digits/description/
+class Solution:
+    def clearDigits(self, s:str):
+        stack=[]
+        for i in s:
+            if stack and i.isdigit():
+                stack.pop()
+            else:
+                stack.append(i)
+        return ''.join(stack)
+
+
+# https://leetcode.com/problems/crawler-log-folder/description/
+class Solution:
+    def minOperations(self, logs):
+        stack=[]
+        for i in logs:
+            if i =='./':
+                continue
+            if stack and i == '../':
+                stack.pop()
+            elif i != './' and i != '../':
+                stack.append(i)
+        return len(stack)
+
+
+# https://leetcode.com/problems/reorder-list/
+class Solution:
+    def reorderList(self, head) -> None:
+        # stack=[]
+        # fast,slow,current_node=head,head,head
+        # while slow and slow.next:
+        #     slow=slow.next
+        #     if fast and fast.next:
+        #         fast=fast.next.next
+        #         if not fast or not fast.next:
+        #             fast=None
+        #             meddle=slow
+        #     if slow and not fast:
+        #         stack.append(slow)
+        # while current_node and current_node.next and stack:
+        #     popped_node=stack.pop()
+        #     temp=current_node.next
+        #     current_node.next=popped_node
+        #     popped_node.next=temp
+        #     current_node=current_node.next.next
+        #     if current_node == meddle:
+        #         popped_node.next.next=None
+        #         break
+        # return head
+
+        if not head or not head.next:
+            return 
+        
+        slow, fast = head, head
+        
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        
+        second = slow.next
+        slow.next = None  
+        
+        prev = None
+        while second:
+            temp = second.next
+            second.next = prev
+            prev = second
+            second = temp
+        
+        first, second = head, prev
+        
+        while second:
+            temp1, temp2 = first.next, second.next
+            first.next = second
+            second.next = temp1
+            
+            first = temp1
+            second = temp2
+
+
+# https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/description/
+class Solution:
+    def finalPrices(self, prices):
+        results=prices[:]
+        stack=[]
+        for i in range(len(prices)):
+            while stack and prices[i] <= prices[stack[-1]]:
+                inx=stack.pop()
+                results[inx]-=prices[i]
+            stack.append(i)
+        return results
+
+
+# https://leetcode.com/problems/implement-stack-using-queues/
+class MyStack:
+
+    def __init__(self):
+        self.stack=[]
+
+    def push(self, x: int) -> None:
+        self.stack.append(x)
+
+    def pop(self) -> int:
+        if self.stack:
+            poped=self.stack.pop()
+            return poped
+        return None
+
+    def top(self) -> int:
+        if self.stack:
+            poped=self.stack[-1]
+            return poped
+        return None
+
+    def empty(self) -> bool:
+        if self.stack:
             return False
-        else:
-            self.sizes[stack_num]+=1
-            self.cust_list[self.index_of_top(stack_num)]=value
+        return True
 
-    def pop(self,stack_num):
-        if self.is_empty(stack_num):
-            return None
-        else:
-            value=self.cust_list[self.index_of_top(stack_num)]
-            self.cust_list[self.index_of_top(stack_num)]=0
-            self.sizes[stack_num]-=1
-        return value
-    
-    def peek(self,stack_num):
-        if self.is_empty(stack_num):
-            return None
-        else:
-            return self.cust_list[self.index_of_top(stack_num)]
+head1=ListNode(val=1)
+head1.next=ListNode(val=2)
+head1.next.next=ListNode(val=3)
+head1.next.next.next=ListNode(val=4)
+head1.next.next.next.next=ListNode(val=5)
+head1.next.next.next.next.next=ListNode(val=6)
+head1.next.next.next.next.next.next=ListNode(val=7)
+head1.next.next.next.next.next.next.next=ListNode(val=8)
 
 
-
-
-multi_stack=MultiStack(5)
-
-print(multi_stack.index_of_top(1))
+print(Solution().finalPrices([8,10,15,2,3]))
