@@ -64,7 +64,7 @@ def merge(arr,l,m,r):
         L[i] = arr[l+i]
 
     for j in range(len(R)):
-        R[j] = arr[m+1+j]
+        R[j] = arr[m+j+1]
     i=0
     j=0
     k=l
@@ -148,5 +148,6 @@ def heap_sort(arr):
 
 
 
-array=[5,4,5,5,5,3]
+array=[5,2,4,1,-1,0,10]
 
+print(merge_sort(array))

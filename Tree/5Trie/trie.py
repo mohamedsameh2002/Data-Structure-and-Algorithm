@@ -31,7 +31,6 @@ class Trie:
             return False
         
 
-
     def delete(self, word):
         def _delete(node,word,index):
             ch = word[index]

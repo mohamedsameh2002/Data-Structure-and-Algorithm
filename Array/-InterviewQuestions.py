@@ -1,3 +1,4 @@
+from collections import defaultdict
 # https://leetcode.com/problems/maximum-average-subarray-i/
 class Solution:
     def findMaxAverage(self, nums:int, k: int):
@@ -16,7 +17,14 @@ class Solution:
         return res/k
 
 
+# https://leetcode.com/problems/majority-element/
+class Solution:
+    def majorityElement(self, nums):
+        nums.sort()
+        n = len(nums)
+        return nums[n//2]
+
 
 so=Solution()
-print(so.findMaxAverage([1,12,-5,-6,50,3],5))
+print(so.majorityElement([2,2,1,1,1,2,2]))
 
